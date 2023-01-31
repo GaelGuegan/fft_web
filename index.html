@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8"/>
+<script type="text/javascript" src="p5.js"></script>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="dsp.js"></script>
+
+<h1>Fast Fourier Transform</h1>
+
+<div id="fourier_transf" style="width: 50%; margin: auto;"></div>
+
+<label for="function1">Fonction 1:</label>
+<select id="function1" style="display:block; margin-bottom: 10px">
+     <option value="cosinus">Acos(2&pi; f + &alpha;)</option>
+     <option value="sinus">Asin(2&pi; f + &alpha;)</option>
+     <option value="sinus cardinal">Asin(2&pi; f + &alpha;) / T</option>
+     <option value="porte">porte</option>
+</select>
+
+<label for="function2">Fonction 2:</label>
+<select id="function2" style="display:block; margin-bottom: 10px">
+     <option value="cosinus">A cos(2&pi; f + &alpha;)</option>
+     <option value="sinus">A sin(2&pi; f + &alpha;)</option>
+     <option value="sinus cardinal">A sin(2&pi; f + &alpha;) / T</option>
+     <option value="porte">porte</option>
+</select>
+
+<label for="function2">Fonction 3:</label>
+<input type="text" style="display:block; margin-bottom: 10px">
+
+<label for="noise">Noise: </label>
+<output name="noise_value">0.5</output>
+<input id="noise" type="range" min="-1" max="1" value="0.9" step="0.1" style="display:block; margin-bottom: 10px">
+
+<label for="freq">Fréquence: </label>
+<output name="freq_value">1/26</output>
+<input id="freq" type="range" min="0" max="1/100" value="1/26" step="1/10" style="display:block; margin-bottom: 10px">
+
+<label for="amp">Amplitude: </label>
+<output name="amp_value">70</output>
+<input id="amp" type="range" min="0" max="130" value="70" step="5" style="display:block; margin-bottom: 10px">
+
+<label for="phase">Phase: </label>
+<output name="phase_value">0</output>
+<input id="phase" type="range" min="0" max="6.28318" value="0" step="0.2" style="display:block; margin-bottom: 10px">

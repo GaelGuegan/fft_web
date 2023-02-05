@@ -1,10 +1,12 @@
+var s = []
+var S = []
 
 var fourier_transf = function(p)
 {
 	p.setup = function()
 	{
 		width = 1024;
-		height = 600;
+		height = 300;
 		canvas = p.createCanvas(width, height);
 		canvas.parent('fourier_transf');
 		canvas.style('border', '2px solid');
@@ -67,11 +69,8 @@ var fourier_transf = function(p)
     fft.forward(input);
     S = fft.spectrum;
 
-		display_axes(10, height/4, width, height/2, 0.05);
-		display_axes(10, height*3/4, width, height/2, 0.05);
-
-    display_function(s, 12, height / 4);
-		display_function(S, 12, height*3/4);
+		display_axes(10, height/2, width, height/2, 0.05);
+    display_function(s, 12, height / 2);
 	}
 
 	function update_function1() {
@@ -237,3 +236,37 @@ var fourier_transf = function(p)
 }
 
 var canvas_1 = new p5(fourier_transf);
+
+var yo = function (p)
+{
+  p.setup = function ()
+  {
+
+		width = 1024;
+		height = 300;
+		canvas = p.createCanvas(width, height);
+		canvas.parent('freqegrg');
+		canvas.style('border', '2px solid');
+		canvas.style('display', 'block');
+		canvas.style('visibility', 'visible');
+  }
+
+  p.draw = function ()
+  {
+    p.background(255, 255, 255);
+    
+		display_function(S, 12, height/2);
+
+  }
+
+	function display_function(f, Ox, Oy) {
+		p.translate(Ox, Oy);
+		p.scale(1, -1);
+    for (let i = 0; i < f.length-1; i++) {
+      p.line(i, f[i], i+1, f[i+1]);
+    }
+		p.resetMatrix();
+	}
+}
+
+var canvas_2 = new p5(yo);

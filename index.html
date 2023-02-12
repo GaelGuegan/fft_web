@@ -6,8 +6,8 @@
 
 <h1>Fast Fourier Transform</h1>
 
-<div id="fourier_transf" style="width: 50%; margin: auto;"></div>
-<div id="freqegrg" style="width: 50%; margin: auto;padding:5px"></div>
+<div id="raw" style="width: 50%; margin: auto;"></div>
+<div id="transf" style="width: 50%; margin: auto;padding:5px"></div>
 
 <label for="function1">Fonction 1:</label>
 <select id="function1" style="display:block; margin-bottom: 10px">
@@ -31,15 +31,15 @@
 
 <label for="noise">Noise: </label>
 <output name="noise_value">0.5</output>
-<input id="noise" type="range" min="-1" max="1" value="0.9" step="0.1" style="display:block; margin-bottom: 10px">
+<input id="noise" type="range" min="0" max="1" value="0.3" step="0.1" style="display:block; margin-bottom: 10px">
 
 <label for="freq">Fréquence: </label>
 <output name="freq_value">1/26</output>
 <input id="freq" type="range" min="0" max="1/100" value="1/26" step="1/10" style="display:block; margin-bottom: 10px">
 
 <label for="amp">Amplitude: </label>
-<output name="amp_value">70</output>
-<input id="amp" type="range" min="0" max="130" value="70" step="5" style="display:block; margin-bottom: 10px">
+<output name="amp_value">50</output>
+<input id="amp" type="range" min="0" max="100" value="70" step="5" style="display:block; margin-bottom: 10px">
 
 <label for="phase">Phase: </label>
 <output name="phase_value">0</output>

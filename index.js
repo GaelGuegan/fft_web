@@ -1,14 +1,14 @@
 var s = []
 var S = []
 
-var fourier_transf = function(p)
+var raw = function(p)
 {
 	p.setup = function()
 	{
-		width = 1024;
-		height = 300;
-		canvas = p.createCanvas(width, height);
-		canvas.parent('fourier_transf');
+		self.width = 1024;
+		self.height = 300;
+		canvas = p.createCanvas(self.width, self.height);
+		canvas.parent('raw');
 		canvas.style('border', '2px solid');
 		canvas.style('position', 'relative');
 		canvas.style('display', 'block');
@@ -35,13 +35,13 @@ var fourier_transf = function(p)
 		phase.addEventListener("change", update_function1);
 		noise.addEventListener("change", update_noise);
 
-		s1 = sinus(width, amp.value, 1/freq.value, parseFloat(phase.value));
-		s2 = cosinus(width, amp.value, 2/freq.value, parseFloat(phase.value));
-		sn = noisy(width, noise.value, amp.value);
+		s1 = sinus(self.width, amp.value, 1/freq.value, parseFloat(phase.value));
+		s2 = cosinus(self.width, amp.value, 2/freq.value, parseFloat(phase.value));
+		sn = noisy(self.width, noise.value, amp.value);
 		s = add(s1, s2);
 		s = add(s, sn);
 
-    p.frameRate(10);
+		p.frameRate(10);
 
 		var input = new Float32Array(1024);
 		for (let i = 0; i < s.length;i++){
@@ -49,28 +49,29 @@ var fourier_transf = function(p)
 		}
 
 		fft = new FFT(s.length, 44100);
-    fft.forward(input);
-    S = fft.spectrum;
+		fft.forward(input);
+		S = fft.spectrum;
 	}
 
 	p.draw = function()
 	{
 		p.background(255, 255, 255);
-		p.line(0, height/2, width, height/2);
+		p.line(0, self.height/2, self.width, self.height/2);
 
-	  sn = noisy(width, noise.value, amp.value);
+		sn = noisy(self.width, noise.value, amp.value);
 		s = add(s1, s2);
-    s = add(s, sn);
+		s = add(s, sn);
 
 		var input = new Float32Array(1024);
 		for (let i = 0; i < s.length;i++){
 			input[i] = s[i];
 		}
-    fft.forward(input);
-    S = fft.spectrum;
+		fft.forward(input);
+		S = fft.spectrum;
+		S = scalar(S, 2.8)
 
-		display_axes(10, height/2, width, height/2, 0.05);
-    display_function(s, 12, height / 2);
+		display_axes(10, self.height/2, self.width, self.height/2, 0.05);
+		display_function(s, 12, self.height/2);
 	}
 
 	function update_function1() {
@@ -80,16 +81,16 @@ var fourier_transf = function(p)
 		document.getElementsByName("noise_value")[0].value = noise.value;
 		switch (f1.value) {
 			case "cosinus":
-				s1 = cosinus(width, amp.value, 1/freq.value, parseFloat(phase.value));
+				s1 = cosinus(self.width, amp.value, 1/freq.value, parseFloat(phase.value));
 				break;
 			case "sinus":
-				s1 = sinus(width, amp.value, 1/freq.value, parseFloat(phase.value));
+				s1 = sinus(self.width, amp.value, 1/freq.value, parseFloat(phase.value));
 				break;
 			case "porte":
-				s1 = porte(width, amp.value, 1, freq.value/100 * width);
+				s1 = porte(self.width, amp.value, 1, freq.value/100 * self.width);
 				break;
 			case "sinus cardinal":
-				s1 = sinc(width, amp.value, width * 3/4, 100);
+				s1 = sinc(self.width, amp.value, self.width * 3/4, 100);
 				break;
 			default:
 				s1 = [];
@@ -102,54 +103,54 @@ var fourier_transf = function(p)
 	}
 
 	function update_function2() {
-    switch (f2.value) {
-      case "none":
-        s2.fill(0, 0, width);
-        break;
-			case "cosinus":
-				s2 = cosinus(width, amp.value, 1/freq.value, parseFloat(phase.value));
-				break;
-			case "sinus":
-				s2 = sinus(width, amp.value, 1/freq.value, parseFloat(phase.value)); 
-				break;
-			case "porte":
-				s2 = porte(width, amp.value, 1, freq.value/100 * width);
-				break;
-			case "sinus cardinal":
-				s2 = sinc(width, width/4, width*3/4, 100);
-				break;
-			default:
-				s2 = [];
-				for (let i = 0; i < 100; i++) {
-					s2[i] = eval(document.getElementById('function2').value);
-				}
+	switch (f2.value) {
+		case "none":
+			s2.fill(0, 0, self.width);
+			break;
+		case "cosinus":
+			s2 = cosinus(self.width, amp.value, 1/freq.value, parseFloat(phase.value));
+			break;
+		case "sinus":
+			s2 = sinus(self.width, amp.value, 1/freq.value, parseFloat(phase.value)); 
+			break;
+		case "porte":
+			s2 = porte(self.width, amp.value, 1, freq.value/100 * self.width);
+			break;
+		case "sinus cardinal":
+			s2 = sinc(self.width, self.width/4, self.width*3/4, 100);
+			break;
+		default:
+			s2 = [];
+			for (let i = 0; i < 100; i++) {
+				s2[i] = eval(document.getElementById('function2').value);
+			}
 		}
 		s = add(s1, s2);
 		s = add(s, sn);
 	}
 
-  function update_noise() {
+	function update_noise() {
 		document.getElementsByName("noise_value")[0].value = noise.value;
-    sn = noisy(width, noise.value, amp.value);
+		sn = noisy(this.width, noise.value, amp.value);
 		s = add(s1, s2);
 		s = add(s, sn);
-  }
+	}
+
+	function scalar(sig1, value) {
+		Sig = [];
+
+		for (let i = 0; i < sig1.length; i++) {
+			Sig[i] = sig1[i] * value;
+		}
+
+		return Sig;
+	}
 
 	function add(sig1, sig2) {
 		Sig = [];
 
 		for (let i = 0; i < sig1.length; i++) {
 			Sig[i] = sig1[i] + sig2[i];
-		}
-
-		return Sig;
-	}
-
-  function mult(sig1, sig2) {
-		Sig = [];
-
-		for (let i = 0; i < sig1.length; i++) {
-			Sig[i] = sig1[i] * sig2[i];
 		}
 
 		return Sig;
@@ -166,9 +167,9 @@ var fourier_transf = function(p)
 	}
 
 	function sinc(size, amp, freq, phi) {
-    var f = [];
-    
-    f[0] = 1 * amp;
+		var f = [];
+	
+		f[0] = 1 * amp;
 		for (let i = 1; i < size; i++) {
 			f[i] = amp * p.sin(2 * p.PI * freq * i + phi) / (i * 0.005);
 		}
@@ -180,7 +181,7 @@ var fourier_transf = function(p)
 		var f = [];
 
 		for (let i = 0; i < size; i++){
-			f[i] = amp * val * p.random(-1, 1);
+			f[i] = amp * p.random(-val, val);
 		}
 
 		return f;
@@ -214,12 +215,8 @@ var fourier_transf = function(p)
 		p.strokeWeight(0.5);
 		p.translate(Ox, Oy);
 		p.line(0, 0, w, 0);
-		p.line(0, -h/2, 0, h/2);
-		for (let i = 0; i < w * rate; i++) {
+		for (let i = 1; i < w * rate; i++) {
 			p.line(i/rate, -5, i/rate, 5);
-		}
-		for (let i = 0; i < h * rate; i++) {
-			p.line(-5, -h/2 + i/rate, 5, -h/2 + i/rate);
 		}
 		p.strokeWeight(1);
 		p.resetMatrix();
@@ -228,45 +225,42 @@ var fourier_transf = function(p)
 	function display_function(f, Ox, Oy) {
 		p.translate(Ox, Oy);
 		p.scale(1, -1);
-    for (let i = 0; i < f.length-1; i++) {
-      p.line(i, f[i], i+1, f[i+1]);
-    }
+		for (let i = 0; i < f.length-1; i++) {
+			p.line(i, f[i], i+1, f[i+1]);
+		}
 		p.resetMatrix();
 	}
 }
 
-var canvas_1 = new p5(fourier_transf);
+var canvas_1 = new p5(raw);
 
-var yo = function (p)
+var transfo = function (p)
 {
-  p.setup = function ()
-  {
-
-		width = 1024;
-		height = 300;
-		canvas = p.createCanvas(width, height);
-		canvas.parent('freqegrg');
+	p.setup = function ()
+	{
+		this.width = 1024;
+		this.height = 250;
+		canvas = p.createCanvas(this.width, this.height);
+		canvas.parent('transf');
 		canvas.style('border', '2px solid');
 		canvas.style('display', 'block');
 		canvas.style('visibility', 'visible');
-  }
+	}
 
-  p.draw = function ()
-  {
-    p.background(255, 255, 255);
-    
-		display_function(S, 12, height/2);
-
-  }
+	p.draw = function ()
+	{
+		p.background(255, 255, 255);
+		display_function(S, 12, this.height * 0.95);
+	}
 
 	function display_function(f, Ox, Oy) {
 		p.translate(Ox, Oy);
 		p.scale(1, -1);
-    for (let i = 0; i < f.length-1; i++) {
-      p.line(i, f[i], i+1, f[i+1]);
-    }
+		for (let i = 0; i < f.length-1; i++) {
+			p.line(i, f[i], i+1, f[i+1]);
+		}
 		p.resetMatrix();
 	}
 }
 
-var canvas_2 = new p5(yo);
+var canvas_2 = new p5(transfo);

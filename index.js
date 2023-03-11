@@ -90,7 +90,7 @@ var raw = function(p)
 				s1 = porte(self.width, amp.value, 1, freq.value/100 * self.width);
 				break;
 			case "sinus cardinal":
-				s1 = sinc(self.width, amp.value, self.width * 3/4, 100);
+				s1 = sinc(self.width, 2*amp.value, 1/freq.value, parseFloat(phase.value));
 				break;
 			default:
 				s1 = [];
@@ -171,7 +171,9 @@ var raw = function(p)
 	
 		f[0] = 1 * amp;
 		for (let i = 1; i < size; i++) {
-			f[i] = amp * p.sin(2 * p.PI * freq * i + phi) / (i * 0.005);
+			//f[i] = 7 * amp * p.sin(freq * i / size) / (freq * i / (size * 2));
+			x = (2 * p.PI * freq * i + phi);
+			f[i] = amp * p.sin(x) / (0.03*x);
 		}
 
 		return f;
